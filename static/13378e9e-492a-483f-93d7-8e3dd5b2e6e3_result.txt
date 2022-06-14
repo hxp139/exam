@@ -1,0 +1,1 @@
+{'verified': True, 'distance': -2.220446049250313e-16, 'threshold': 0.4, 'model': 'Facenet', 'detector_backend': 'opencv', 'similarity_metric': 'cosine'}

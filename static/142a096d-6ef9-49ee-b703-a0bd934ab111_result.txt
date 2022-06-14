@@ -1,0 +1,1 @@
+{'count_person': 3, 'has_phone': 0, 'result_path': 'static/image/142a096d-6ef9-49ee-b703-a0bd934ab111.jpg'}

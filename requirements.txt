@@ -1,0 +1,7 @@
+deepface==0.0.74     
+flask==2.1.2       
+mediapipe==0.8.10 
+tensorflow==2.8.0    
+opencv-python
+pandas      
+pillow
