@@ -1,6 +1,6 @@
 from flask import Flask, request, Response, render_template, jsonify, make_response, send_from_directory, copy_current_request_context,redirect,url_for
 from werkzeug.utils import secure_filename
-import uuid, datetime, threading
+import uuid, datetime, threading, json
 from strUtil import Pic_str
 from face import detect_faces
 from cheat_detect import cheat_detect_fuc
@@ -142,6 +142,27 @@ def face_detect():
             f.stream.close = passExit
             t = threading.Thread(target=save_file, args=(normalExit,))
             t.start()
+            while(t.is_alive()):
+                continue
+            with open(os.path.join(RESULT_FOLDER, first_name + '_result.txt'), 'r') as f:
+                result_dict = eval(f.read())
+                if result_dict["has_faces"] == "0":
+                    code = "100"
+                    msg = "未检测到人脸"
+
+                    return {"code": code,
+                            "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
+                            "msg":msg
+                            }
+
+                elif result_dict["has_faces"] > "1":
+                    code = "300"
+                    msg = "检测到多张人脸"
+
+                    return {"code": code,
+                            "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
+                            "msg":msg
+                            }
 
             return {"code": '200',
                     "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
@@ -203,7 +224,9 @@ def face_compare_detect():
             t = threading.Thread(target=save_file, args=(normalExit,))
             t.start()
 
-            return {"code": '200', "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt')}
+            return {"code": '200', 
+                    "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
+                    "msg":"上传成功"}
 
         else:
             return "格式错误，仅支持jpg、png、jpeg格式文件"

@@ -9,7 +9,7 @@ def detect_faces(file_name, first_name, file_name_hz):
     # 构建脸部特征提取对象
     mp_face_mesh = mp.solutions.face_mesh
     face_mesh = mp_face_mesh.FaceMesh(static_image_mode=False,  # Flase ：处理视频  True:处理单张图片
-                                      max_num_faces=1,  # 最大脸的个数
+                                      max_num_faces=5,  # 最大脸的个数
                                       refine_landmarks=True,
                                       min_detection_confidence=0.5,  # 检测置信度
                                       min_tracking_confidence=0.5)  # 跟踪置信度
@@ -33,6 +33,7 @@ def detect_faces(file_name, first_name, file_name_hz):
     eye_state = ''
     has_faces = '0'
     if results.multi_face_landmarks:  # 检测到了人脸
+        has_faces = '' + str(len(results.multi_face_landmarks))
         for face_landmarks in results.multi_face_landmarks:  # 绘制每张脸
             # 利用 内置的mp_drawing 进行绘图
             ## 人脸网格
