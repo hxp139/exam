@@ -1,0 +1,1 @@
+{'verified': None, 'distance': None, 'max_threshold_to_verify': 0.4, 'model': 'VGG-Face', 'similarity_metric': 'cosine'}

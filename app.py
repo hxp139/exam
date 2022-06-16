@@ -1,6 +1,6 @@
 from flask import Flask, request, Response, render_template, jsonify, make_response, send_from_directory, copy_current_request_context,redirect,url_for
 from werkzeug.utils import secure_filename
-import uuid, datetime, threading, json
+import uuid, datetime, threading
 from strUtil import Pic_str
 from face import detect_faces
 from cheat_detect import cheat_detect_fuc
@@ -201,8 +201,18 @@ def face_compare_detect():
         closeAfterWrite()
         print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " write done")
 
-        result = DeepFace.verify(img1_path = os.path.join(UPLOAD_FOLDER, img1_name), img2_path = os.path.join(UPLOAD_FOLDER, img2_name), model_name="Facenet")
-        print(result)
+        try:
+            result = DeepFace.verify(   img1_path = os.path.join(UPLOAD_FOLDER, img1_name), 
+                                        img2_path = os.path.join(UPLOAD_FOLDER, img2_name), 
+                                        model_name="Facenet")
+            print(result)
+        except ValueError:#未检测到人脸返回None
+            result = {
+                "verified": None
+                , "distance": None
+                , "max_threshold_to_verify": 0.40
+                , "model": "Facenet"
+                , "similarity_metric": "cosine"}   
 
         # 保存结果
         with open(os.path.join(RESULT_FOLDER, first_name + '_result.txt'), 'w') as f:
@@ -224,14 +234,35 @@ def face_compare_detect():
             t = threading.Thread(target=save_file, args=(normalExit,))
             t.start()
 
+            while(t.is_alive()):
+                continue
+            with open(os.path.join(RESULT_FOLDER, first_name + '_result.txt'), 'r') as f:
+                result_dict = eval(f.read())
+                if result_dict["verified"] == False:
+                    code = "300"
+                    msg = "非同一人"
+
+                    return {"code": code,
+                            "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
+                            "msg":msg
+                            }
+                elif result_dict["verified"] == None:
+                    code = "100"
+                    msg = "未检测到人脸"
+
+                    return {"code": code,
+                            "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
+                            "msg":msg
+                            }
+
             return {"code": '200', 
                     "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
-                    "msg":"上传成功"}
+                    "msg":"检测成功"}
 
         else:
             return "格式错误，仅支持jpg、png、jpeg格式文件"
     else:
-        return {}
+        return {"code": '500'}
 
 # 作弊检测
 @app.route("/cheat_detect", methods=['POST', "GET"])
@@ -273,7 +304,9 @@ def cheat_detect():
             f.stream.close = passExit
             t = threading.Thread(target=save_file, args=(normalExit,))
             t.start()
-            return {"code": '200', "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'), 'image_url':"static/image/{}.jpg".format(first_name)}
+            return {"code": '200', 
+                    "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'), 
+                    'image_url':"static/image/{}.jpg".format(first_name)}
         else:
             return "格式错误，仅支持jpg、png、jpeg格式文件"
     else:

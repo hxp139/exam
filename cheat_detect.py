@@ -5,7 +5,7 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 save_path = './img/tmp.jpg'
 
-model_dec = torch.hub.load('ultralytics/yolov5', 'yolov5s')  # or yolov5m, yolov5l, yolov5x, custom
+model_dec = torch.hub.load('/root/.cache/torch/hub/ultralytics_yolov5_master', 'yolov5s', source='local')  # or yolov5m, yolov5l, yolov5x, custom
 
 # Images # or file, Path, PIL, OpenCV, numpy, list
 def cheat_detect_fuc(image, uuidstr):
