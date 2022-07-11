@@ -16,7 +16,7 @@ def cheat_detect_fuc(image, uuidstr):
     results = model_dec(img)
     # Results
     pandas = results.pandas()  # or .show(), .save(), .crop(), .pandas(), etc. print()
-    # print(pandas.xywhn[-1])
+    print(pandas)
     names = pandas.xywhn[0].name
     name_list = []
 
@@ -28,12 +28,12 @@ def cheat_detect_fuc(image, uuidstr):
         if name == "person":
             count_person += 1
         if name == "cell phone":
-            has_phone = 1
+            has_phone += 1
             result = "Phone cheating"
             print(result)
-    if count_person > 1:
-        result = "Number of people cheating"
-        print(result)
+        if count_person > 1:
+            result = "Number of people cheating"
+            print(result)
 
     boxes = pandas.xyxy[0]
 

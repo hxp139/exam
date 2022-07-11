@@ -147,7 +147,7 @@ def face_detect():
             with open(os.path.join(RESULT_FOLDER, first_name + '_result.txt'), 'r') as f:
                 result_dict = eval(f.read())
                 if result_dict["has_faces"] == "0":
-                    code = "100"
+                    code = "000"
                     msg = "未检测到人脸"
 
                     return {"code": code,
@@ -166,7 +166,7 @@ def face_detect():
 
             return {"code": '200',
                     "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
-                    "msg":"上传成功"
+                    "msg":"检测到人脸"
                     }
 
         else:
@@ -247,7 +247,7 @@ def face_compare_detect():
                             "msg":msg
                             }
                 elif result_dict["verified"] == None:
-                    code = "100"
+                    code = "000"
                     msg = "未检测到人脸"
 
                     return {"code": code,
@@ -257,7 +257,7 @@ def face_compare_detect():
 
             return {"code": '200', 
                     "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
-                    "msg":"检测成功"}
+                    "msg":"检测成功，是同一人"}
 
         else:
             return "格式错误，仅支持jpg、png、jpeg格式文件"
@@ -304,13 +304,27 @@ def cheat_detect():
             f.stream.close = passExit
             t = threading.Thread(target=save_file, args=(normalExit,))
             t.start()
-            return {"code": '200', 
+
+            while(t.is_alive()):
+                continue
+            with open(os.path.join(RESULT_FOLDER, first_name + '_result.txt'), 'r') as f:
+                result_dict = eval(f.read())
+                if result_dict["has_phone"] > 0:
+                    code = "200"
+                    msg = "检测到手机"
+
+                    return {"code": code,
+                            "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'),
+                            "msg":msg
+                            }
+
+            return {"code": '000', 
                     "result": os.path.join(RESULT_FOLDER, first_name + '_result.txt'), 
-                    'image_url':"static/image/{}.jpg".format(first_name)}
+                    "msg":"考试正常进行"}
         else:
             return "格式错误，仅支持jpg、png、jpeg格式文件"
     else:
-        return {}
+        return {"code": '500'}
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=port, debug=True)  # 项目入口

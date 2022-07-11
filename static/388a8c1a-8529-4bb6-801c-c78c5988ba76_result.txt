@@ -1,1 +1,0 @@
-{'code': '200', 'has_faces': '2', 'mouth_state': 'not  mouth', 'eye_state': 'not  eye', 'image_url_detect': '388a8c1a-8529-4bb6-801c-c78c5988ba76_detect.jpg', 'image_url': '388a8c1a-8529-4bb6-801c-c78c5988ba76.jpg'}
