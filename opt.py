@@ -4,7 +4,7 @@
 # @File   : opt.py
 import os
 
-host = '124.70.177.168'             # 设置图片返回的域名前缀
+host = ''             # 设置图片返回的域名前缀
 port = 5000                         # 填写端口
 image_c = 1024                      # 图片上传大小限制
 UPLOAD_FOLDER = 'static/image/'     # 设置上传文件的目录

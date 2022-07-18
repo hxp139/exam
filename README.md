@@ -22,16 +22,31 @@
     kill -9 123 #123 是进程 PID，此命令可杀掉 PID 为 123 的端口进程
 
 ## 3. 接口详情：
-### 3.1 BaseUrl = http://124.70.177.168:5000/            
+### 3.1 BaseUrl = http://*.*.*.*:5000/            
 ### 3.2 接口人脸检测：BaseUrl/face_detect  form-data {"file": file}  (POST方式)
-    返回： 
+    返回：
+
+    {
+    code:200/300/500
+    msg:# 说明
+    result:# 结果文件地址
+    }
+    reslult: 
     {
     "code": "200",
-    "image_url": "http://124.70.177.168:5000/image/229dd23f-9662-46f3-a999-12d49a710ede.jpg",     # 原图
-    "image_url_detect": "http://124.70.177.168:5000/image/229dd23f-9662-46f3-a999-12d49a710ede_detect.jpg" # 检测结果
+    "image_url": "http://*.*.*.*:5000/image/229dd23f-9662-46f3-a999-12d49a710ede.jpg",     # 原图
+    "image_url_detect": "http://*.*.*.*:5000/image/229dd23f-9662-46f3-a999-12d49a710ede_detect.jpg" # 检测结果
     }
 ### 3.3 接口人脸对比：BaseUrl/face_compare_detect  form-data {"img1_path": file1_path, "img2_path": file2_path}  (POST方式)
     返回：
+
+    {
+    code:200/300/500
+    msg:# 说明
+    result:# 结果文件地址
+    }
+
+    result:
     {
     'verified': True,  # 是否为同一人
     'distance': 0.0,    # 置信度，越小越好
@@ -42,10 +57,11 @@
     }
 ### 3.4 接口作弊检测：BaseUrl/cheat_detect  form-data {"file": file}  (POST方式)
     返回:
+    返回：
     {
-    "code": "200",
-    "image_url": "static/image/d092340b-154f-4887-9a95-54346679ea26.jpg",  # 作弊证据：需要拼接 BaseUrl + image_url
-    "result": "static/d092340b-154f-4887-9a95-54346679ea26_result.txt"     # 检测结果：需要拼接 BaseUrl + result 
+    code:200/300/500
+    msg:# 说明
+    result:# 结果文件地址
     }
     
     result格式：
